@@ -1,3 +1,10 @@
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { ArrowUpDownIcon, SearchIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
@@ -6,13 +13,6 @@ import { Input } from "./components/ui/input";
 import { useGitHubItems } from "./lib/useGitHubItems";
 import { useHuggingFaceDatasets } from "./lib/useHuggingFaceDatasets";
 import { useHuggingFaceModels } from "./lib/useHuggingFaceModels";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 
 function App() {
   const [searchString, setSearchString] = useState("");
@@ -23,9 +23,13 @@ function App() {
 
   return (
     <div className="min-h-svh">
-      <div className="max-w-sreen-xl m-auto p-16">
+      <div className="m-auto p-4 md:p-16">
         <div className="flex flex-col items-center">
-          <img alt="" className="w-32 h-32 mb-8" src="/bioscan-sites.png"></img>
+          <img
+            alt=""
+            className="w-16 h-16 my-8 md:w-32 md:h-32"
+            src="/bioscan-sites.png"
+          ></img>
           <h1 className="heading-base text-primary text-center mb-4">
             BIOSCAN-ML Catalog
           </h1>
@@ -41,7 +45,7 @@ function App() {
             </a>
             .
           </p>
-          <div className="w-full max-w-lg flex items-center justify-center gap-4 mb-16">
+          <div className="w-full max-w-lg flex flex-col gap-4 mb-16 sm:flex-row">
             <div className="grow relative">
               <Input
                 className="px-10"
@@ -63,10 +67,12 @@ function App() {
                 </Button>
               ) : null}
             </div>
-            <Select value={orderBy} onValueChange={setOrderBy}>
-              <SelectTrigger>
-                <ArrowUpDownIcon className="w-4 h-4 text-foreground" />
-                <SelectValue />
+            <Select onValueChange={setOrderBy} value={orderBy}>
+              <SelectTrigger className="w-full sm:w-auto">
+                <div className="flex items-center gap-3">
+                  <ArrowUpDownIcon className="w-4 h-4 text-foreground" />
+                  <SelectValue />
+                </div>
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="name">Name</SelectItem>
@@ -75,7 +81,7 @@ function App() {
               </SelectContent>
             </Select>
           </div>
-          <div className="w-full flex flex-col gap-32">
+          <div className="w-full flex flex-col gap-16 md:gap-32">
             <Gallery
               items={huggingFaceDatasets.map((huggingFaceDataset) => ({
                 description:

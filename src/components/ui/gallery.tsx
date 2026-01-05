@@ -69,11 +69,11 @@ export const Gallery = ({
 
   return (
     <div>
-      <h2 className="heading-sm mb-8">
+      <h2 className="heading-sm mb-4 md:mb-8">
         {title} ({filteredItems.length})
       </h2>
       {filteredItems.length ? (
-        <div className="grid grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-8 lg:grid-cols-3 2xl:grid-cols-5">
           {filteredItems.map((item) => (
             <GalleryItem key={item.id} {...item} />
           ))}
@@ -106,7 +106,7 @@ const GalleryItem = ({
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-lg font-medium">{name}</h3>
         <span className="text-muted-foreground text-xs text-right">
-          Last updated {lastUpdated.toLocaleDateString()}
+          Updated {lastUpdated.toLocaleDateString()}
         </span>
       </div>
       <div className="flex items-center gap-4">
@@ -140,6 +140,7 @@ const GalleryItem = ({
       <div className="line-clamp-5">
         <p className="text-sm">{description ?? "No description provided."}</p>
       </div>
+      <div />
       <div className="flex flex-wrap items-center gap-2">
         {tags.slice(0, TAGS_LIMIT).map((tag) => (
           <Tag key={tag} name={tag} />
