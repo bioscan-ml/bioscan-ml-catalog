@@ -7,12 +7,13 @@ import {
 } from "@/components/ui/select";
 import { ArrowUpDownIcon, SearchIcon, XIcon } from "lucide-react";
 import { useState } from "react";
-import { Button } from "./components/ui/button";
+import { Button, buttonVariants } from "./components/ui/button";
 import { Gallery } from "./components/ui/gallery";
 import { Input } from "./components/ui/input";
 import { useGitHubItems } from "./lib/useGitHubItems";
 import { useHuggingFaceDatasets } from "./lib/useHuggingFaceDatasets";
 import { useHuggingFaceModels } from "./lib/useHuggingFaceModels";
+import { cn } from "./lib/utils";
 
 function App() {
   const [searchString, setSearchString] = useState("");
@@ -24,6 +25,15 @@ function App() {
   return (
     <div className="min-h-svh">
       <div className="m-auto p-4 md:p-16">
+        <a
+          href="https://bioscan-ml.github.io/"
+          className={cn(
+            buttonVariants({ size: "default", variant: "outline" }),
+            "fixed top-8 left-8"
+          )}
+        >
+          BIOSCAN-ML
+        </a>
         <div className="flex flex-col items-center">
           <img
             alt=""
