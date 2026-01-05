@@ -22,7 +22,7 @@ function App() {
             BIOSCAN-ML Catalog
           </h1>
           <p className="text-lg text-muted-foregorund text-center mb-16">
-            Explore public datasets, models and repos. Catalog inspired by{" "}
+            Explore public datasets, models and code. Catalog inspired by{" "}
             <a
               className="underline"
               href="https://imageomics.github.io/catalog/"
@@ -47,6 +47,7 @@ function App() {
               {searchString.length ? (
                 <Button
                   className="absolute top-0 right-0 h-10 w-10"
+                  onClick={() => setSearchString("")}
                   size="icon"
                   variant="ghost"
                 >
@@ -55,7 +56,7 @@ function App() {
               ) : null}
             </div>
           </div>
-          <div className="flex flex-col gap-32">
+          <div className="w-full flex flex-col gap-32">
             <Gallery
               items={huggingFaceDatasets.map((huggingFaceDataset) => ({
                 description:
@@ -72,8 +73,9 @@ function App() {
                   huggingFaceDataset.cardData?.tags ?? huggingFaceDataset.tags,
                 updatedAt: new Date(huggingFaceDataset.lastModified),
               }))}
+              searchString={searchString}
               large
-              title={`Datasets (${huggingFaceDatasets.length})`}
+              title="Datasets"
             />
             <Gallery
               items={huggingFaceModels.map((huggingFaceModel) => ({
@@ -86,7 +88,8 @@ function App() {
                 updatedAt: new Date(huggingFaceModel.lastModified),
               }))}
               large
-              title={`Models (${huggingFaceModels.length})`}
+              searchString={searchString}
+              title="Models"
             />
             <Gallery
               items={gitHubItems.map((gitHubItem) => ({
@@ -100,7 +103,8 @@ function App() {
                 updatedAt: new Date(gitHubItem.updated_at),
               }))}
               large
-              title={`Models (${gitHubItems.length})`}
+              searchString={searchString}
+              title="Code"
             />
           </div>
         </div>

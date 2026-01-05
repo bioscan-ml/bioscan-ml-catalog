@@ -1,6 +1,13 @@
 import { cn } from "@/lib/utils";
 import { DownloadIcon, GitForkIcon, HeartIcon, StarIcon } from "lucide-react";
 import { Tag } from "./tag";
+import Fuse from "fuse.js";
+import { useMemo } from "react";
+
+const SEARCH_OPTIONS = {
+  keys: ["name", "tags"],
+  threshold: 0.4,
+};
 
 const TAGS_LIMIT = 5;
 
@@ -20,21 +27,42 @@ type GalleryItemProps = {
 export const Gallery = ({
   items,
   large,
+  searchString,
   title,
 }: {
   items: GalleryItemProps[];
   large?: boolean;
+  searchString?: string;
   title: string;
-}) => (
-  <div>
-    <h2 className="heading-sm mb-8">{title}</h2>
-    <div className={cn("grid grid-cols-5 gap-8", { "grid-cols-3": large })}>
-      {items.map((item) => (
-        <GalleryItem key={item.id} {...item} />
-      ))}
+}) => {
+  const filteredItems = useMemo(() => {
+    let result = items;
+
+    if (searchString?.length) {
+      const fuse = new Fuse(result, SEARCH_OPTIONS);
+      result = fuse.search(searchString)?.map(({ item }) => item);
+    }
+
+    return result;
+  }, [items, searchString]);
+
+  return (
+    <div>
+      <h2 className="heading-sm mb-8">
+        {title} ({filteredItems.length})
+      </h2>
+      {filteredItems.length ? (
+        <div className={cn("grid grid-cols-5 gap-8", { "grid-cols-3": large })}>
+          {filteredItems.map((item) => (
+            <GalleryItem key={item.id} {...item} />
+          ))}
+        </div>
+      ) : (
+        <p className="text-sm">No items to show.</p>
+      )}
     </div>
-  </div>
-);
+  );
+};
 
 const GalleryItem = ({
   description = "No description provided.",
