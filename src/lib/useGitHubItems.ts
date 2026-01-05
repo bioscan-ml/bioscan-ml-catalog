@@ -7,9 +7,9 @@ type GitHubItem = {
   id: number;
   language: string;
   name: string;
+  pushed_at: string;
   stargazers_count: number;
   topics: string[];
-  updated_at: string;
 };
 
 const URL = "https://api.github.com/orgs/bioscan-ml/repos?type=public";

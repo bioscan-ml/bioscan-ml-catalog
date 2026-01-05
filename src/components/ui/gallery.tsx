@@ -1,8 +1,7 @@
-import { cn } from "@/lib/utils";
-import { DownloadIcon, GitForkIcon, HeartIcon, StarIcon } from "lucide-react";
-import { Tag } from "./tag";
 import Fuse from "fuse.js";
+import { DownloadIcon, GitForkIcon, HeartIcon, StarIcon } from "lucide-react";
 import { useMemo } from "react";
+import { Tag } from "./tag";
 
 const SEARCH_OPTIONS = {
   keys: ["name", "tags"],
@@ -17,34 +16,56 @@ type GalleryItemProps = {
   forksCount?: number;
   href: string;
   id: string;
+  lastUpdated: Date;
   likeCount?: number;
   name: string;
   starCount?: number;
   tags?: string[];
-  updatedAt: Date;
 };
 
 export const Gallery = ({
   items,
-  large,
+  orderBy,
   searchString,
   title,
 }: {
   items: GalleryItemProps[];
-  large?: boolean;
+  orderBy?: string;
   searchString?: string;
   title: string;
 }) => {
   const filteredItems = useMemo(() => {
-    let result = items;
+    let result = [...items];
 
     if (searchString?.length) {
-      const fuse = new Fuse(result, SEARCH_OPTIONS);
+      const fuse = new Fuse(items, SEARCH_OPTIONS);
       result = fuse.search(searchString)?.map(({ item }) => item);
     }
 
+    if (orderBy) {
+      if (orderBy === "name") {
+        result.sort((i1, i2) =>
+          i1.name < i2.name ? -1 : i1.name > i2.name ? 1 : 0
+        );
+      }
+
+      if (orderBy === "lastUpdated") {
+        result.sort(
+          (i1, i2) => i2.lastUpdated.getTime() - i1.lastUpdated.getTime()
+        );
+      }
+
+      if (orderBy === "likes") {
+        result.sort(
+          (i1, i2) =>
+            (i2.likeCount ?? i2.starCount ?? 0) -
+            (i1.likeCount ?? i1.starCount ?? 0)
+        );
+      }
+    }
+
     return result;
-  }, [items, searchString]);
+  }, [items, orderBy, searchString]);
 
   return (
     <div>
@@ -52,7 +73,7 @@ export const Gallery = ({
         {title} ({filteredItems.length})
       </h2>
       {filteredItems.length ? (
-        <div className={cn("grid grid-cols-5 gap-8", { "grid-cols-3": large })}>
+        <div className="grid grid-cols-3 gap-8">
           {filteredItems.map((item) => (
             <GalleryItem key={item.id} {...item} />
           ))}
@@ -69,11 +90,11 @@ const GalleryItem = ({
   downloadCount,
   forksCount,
   href,
+  lastUpdated,
   likeCount,
   name,
   starCount,
   tags = [],
-  updatedAt,
 }: GalleryItemProps) => (
   <a
     className="flex flex-col bg-muted rounded-md border shadow-xs transition-[color,box-shadow] overflow-hidden hover:shadow-lg"
@@ -85,7 +106,7 @@ const GalleryItem = ({
       <div className="flex items-start justify-between gap-4">
         <h3 className="text-lg font-medium">{name}</h3>
         <span className="text-muted-foreground text-xs text-right">
-          Last updated {updatedAt.toLocaleDateString()}
+          Last updated {lastUpdated.toLocaleDateString()}
         </span>
       </div>
       <div className="flex items-center gap-4">
