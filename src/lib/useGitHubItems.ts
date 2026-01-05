@@ -2,13 +2,17 @@ import { useEffect, useState } from "react";
 
 type GitHubItem = {
   description: string;
+  forks_count: number;
   html_url: string;
   id: number;
   language: string;
   name: string;
   stargazers_count: number;
   topics: string[];
+  updated_at: string;
 };
+
+const URL = "https://api.github.com/orgs/bioscan-ml/repos?type=public";
 
 export const useGitHubItems = () => {
   const [gitHubItems, setGitHubItems] = useState<GitHubItem[]>([]);
@@ -21,9 +25,7 @@ export const useGitHubItems = () => {
       setError(undefined);
 
       try {
-        const response = await fetch(
-          "https://api.github.com/orgs/bioscan-ml/repos?type=public"
-        );
+        const response = await fetch(URL);
         const data: GitHubItem[] = await response.json();
         setGitHubItems(data);
       } catch (error) {

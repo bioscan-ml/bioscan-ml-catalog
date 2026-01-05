@@ -1,13 +1,17 @@
 import { SearchIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { Button } from "./components/ui/button";
-import { Gallery, GalleryItem } from "./components/ui/gallery";
+import { Gallery } from "./components/ui/gallery";
 import { Input } from "./components/ui/input";
 import { useGitHubItems } from "./lib/useGitHubItems";
+import { useHuggingFaceDatasets } from "./lib/useHuggingFaceDatasets";
+import { useHuggingFaceModels } from "./lib/useHuggingFaceModels";
 
 function App() {
   const [searchString, setSearchString] = useState("");
   const { gitHubItems } = useGitHubItems();
+  const { huggingFaceModels } = useHuggingFaceModels();
+  const { huggingFaceDatasets } = useHuggingFaceDatasets();
 
   return (
     <div className="min-h-svh">
@@ -18,7 +22,7 @@ function App() {
             BIOSCAN-ML Catalog
           </h1>
           <p className="text-lg text-muted-foregorund text-center mb-16">
-            Explore public code, datasets and models. Catalog inspired by{" "}
+            Explore public datasets, models and repos. Catalog inspired by{" "}
             <a
               className="underline"
               href="https://imageomics.github.io/catalog/"
@@ -51,18 +55,54 @@ function App() {
               ) : null}
             </div>
           </div>
-          <Gallery title={`GitHub repos (${gitHubItems.length})`}>
-            {gitHubItems.map((gitHubItem) => (
-              <GalleryItem
-                key={gitHubItem.id}
-                description={gitHubItem.description}
-                href={gitHubItem.html_url}
-                name={gitHubItem.name}
-                starCount={gitHubItem.stargazers_count}
-                tags={[gitHubItem.language, ...gitHubItem.topics]}
-              />
-            ))}
-          </Gallery>
+          <div className="flex flex-col gap-32">
+            <Gallery
+              items={huggingFaceDatasets.map((huggingFaceDataset) => ({
+                description:
+                  huggingFaceDataset.cardData?.description ??
+                  huggingFaceDataset.description,
+                downloadCount: huggingFaceDataset.downloads,
+                href: `https://huggingface.co/datasets/${huggingFaceDataset.id}`,
+                id: huggingFaceDataset.id,
+                likeCount: huggingFaceDataset.likes,
+                name:
+                  huggingFaceDataset.cardData?.pretty_name ??
+                  huggingFaceDataset.id.replace("bioscan-ml/", ""),
+                tags:
+                  huggingFaceDataset.cardData?.tags ?? huggingFaceDataset.tags,
+                updatedAt: new Date(huggingFaceDataset.lastModified),
+              }))}
+              large
+              title={`Datasets (${huggingFaceDatasets.length})`}
+            />
+            <Gallery
+              items={huggingFaceModels.map((huggingFaceModel) => ({
+                downloadCount: huggingFaceModel.downloads,
+                href: `https://huggingface.co/${huggingFaceModel.id}`,
+                id: huggingFaceModel.id,
+                likeCount: huggingFaceModel.likes,
+                name: huggingFaceModel.id.replace("bioscan-ml/", ""),
+                tags: huggingFaceModel.tags,
+                updatedAt: new Date(huggingFaceModel.lastModified),
+              }))}
+              large
+              title={`Models (${huggingFaceModels.length})`}
+            />
+            <Gallery
+              items={gitHubItems.map((gitHubItem) => ({
+                description: gitHubItem.description,
+                forksCount: gitHubItem.forks_count,
+                href: gitHubItem.html_url,
+                id: `${gitHubItem.id}`,
+                name: gitHubItem.name,
+                starCount: gitHubItem.stargazers_count,
+                tags: gitHubItem.topics,
+                updatedAt: new Date(gitHubItem.updated_at),
+              }))}
+              large
+              title={`Models (${gitHubItems.length})`}
+            />
+          </div>
         </div>
       </div>
     </div>
