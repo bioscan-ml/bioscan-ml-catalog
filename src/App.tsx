@@ -29,7 +29,7 @@ function App() {
           href="https://bioscan-ml.github.io/"
           className={cn(
             buttonVariants({ size: "default", variant: "outline" }),
-            "fixed top-8 left-8"
+            "fixed top-4 left-4 z-1 md:top-8 md:left-8"
           )}
         >
           BIOSCAN-ML
@@ -43,8 +43,15 @@ function App() {
           <h1 className="heading-base text-primary text-center mb-4">
             BIOSCAN-ML Catalog
           </h1>
-          <p className="text-lg text-muted-foregorund text-center mb-16">
-            Explore public datasets, models and code. Catalog inspired by{" "}
+          <p className="max-w-lg text-lg text-muted-foregorund text-center mb-16">
+            Explore public datasets, models and code from the{" "}
+            <a
+              className="underline whitespace-nowrap"
+              href="https://bioscan-ml.github.io/"
+            >
+              BIOSCAN-ML
+            </a>{" "}
+            team. Catalog inspired by{" "}
             <a
               className="underline"
               href="https://imageomics.github.io/catalog/"

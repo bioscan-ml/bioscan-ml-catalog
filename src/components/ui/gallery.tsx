@@ -5,10 +5,10 @@ import { Tag } from "./tag";
 
 const SEARCH_OPTIONS = {
   keys: ["name", "tags"],
-  threshold: 0.4,
+  threshold: 0.5,
 };
 
-const TAGS_LIMIT = 5;
+const TAGS_LIMIT = 7;
 
 type GalleryItemProps = {
   description?: string;
@@ -104,7 +104,7 @@ const GalleryItem = ({
   >
     <div className="p-4 bg-[#f3f4f6] border-b">
       <div className="flex items-start justify-between gap-4">
-        <h3 className="text-lg font-medium">{name}</h3>
+        <h3 className="text-lg font-medium whitespace-nowrap">{name}</h3>
         <span className="text-muted-foreground text-xs text-right">
           Updated {lastUpdated.toLocaleDateString()}
         </span>
