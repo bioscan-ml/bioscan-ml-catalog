@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import { DownloadIcon, GitForkIcon, HeartIcon, StarIcon } from "lucide-react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { Tag } from "./tag";
 
 const SEARCH_OPTIONS = {
@@ -95,62 +95,72 @@ const GalleryItem = ({
   name,
   starCount,
   tags = [],
-}: GalleryItemProps) => (
-  <a
-    className="flex flex-col bg-muted rounded-md border shadow-xs transition-[color,box-shadow] overflow-hidden hover:shadow-lg"
-    href={href}
-    rel="noopener noreferrer"
-    target="_blank"
-  >
-    <div className="p-4 bg-[#f3f4f6] border-b">
-      <div className="flex items-start justify-between gap-4">
-        <h3 className="text-lg font-medium whitespace-nowrap">{name}</h3>
-        <span className="text-muted-foreground text-xs text-right">
-          Updated {lastUpdated.toLocaleDateString()}
-        </span>
-      </div>
-      <div className="flex items-center gap-4">
-        {starCount !== undefined ? (
-          <div className="flex items-center gap-1 text-muted-foreground text-sm">
-            <StarIcon className="w-4 h-4 text-chart-4 fill-chart-4" />
-            <span>{starCount}</span>
-          </div>
-        ) : null}
-        {likeCount !== undefined ? (
-          <div className="flex items-center gap-1 text-muted-foreground text-sm">
-            <HeartIcon className="w-4 h-4 text-chart-1 fill-chart-1" />
-            <span>{likeCount}</span>
-          </div>
-        ) : null}
-        {downloadCount !== undefined ? (
-          <div className="flex items-center gap-1 text-muted-foreground text-sm">
-            <DownloadIcon className="w-4 h-4" />
-            <span>{downloadCount}</span>
-          </div>
-        ) : null}
-        {forksCount !== undefined ? (
-          <div className="flex items-center gap-1 text-muted-foreground text-sm">
-            <GitForkIcon className="w-4 h-4" />
-            <span>{forksCount}</span>
-          </div>
-        ) : null}
-      </div>
-    </div>
-    <div className="grow flex flex-col gap-4 p-4">
-      <div className="line-clamp-5">
-        <p className="text-sm">{description ?? "No description provided."}</p>
-      </div>
-      <div />
-      <div className="flex flex-wrap items-center gap-2">
-        {tags.slice(0, TAGS_LIMIT).map((tag) => (
-          <Tag key={tag} name={tag} />
-        ))}
-        {tags.length > TAGS_LIMIT ? (
-          <span className="text-xs text-muted-foreground">
-            + {tags.length - TAGS_LIMIT} more
+}: GalleryItemProps) => {
+  const [expandTags, setExpandTags] = useState(false);
+
+  return (
+    <a
+      className="flex flex-col bg-muted rounded-md border shadow-xs transition-[color,box-shadow] overflow-hidden hover:shadow-lg"
+      href={href}
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <div className="p-4 bg-[#f3f4f6] border-b">
+        <div className="flex items-start justify-between gap-4">
+          <h3 className="text-lg font-medium whitespace-nowrap">{name}</h3>
+          <span className="text-muted-foreground text-xs text-right">
+            Updated {lastUpdated.toLocaleDateString()}
           </span>
-        ) : null}
+        </div>
+        <div className="flex items-center gap-4">
+          {starCount !== undefined ? (
+            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+              <StarIcon className="w-4 h-4 text-chart-4 fill-chart-4" />
+              <span>{starCount}</span>
+            </div>
+          ) : null}
+          {likeCount !== undefined ? (
+            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+              <HeartIcon className="w-4 h-4 text-chart-1 fill-chart-1" />
+              <span>{likeCount}</span>
+            </div>
+          ) : null}
+          {downloadCount !== undefined ? (
+            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+              <DownloadIcon className="w-4 h-4" />
+              <span>{downloadCount}</span>
+            </div>
+          ) : null}
+          {forksCount !== undefined ? (
+            <div className="flex items-center gap-1 text-muted-foreground text-sm">
+              <GitForkIcon className="w-4 h-4" />
+              <span>{forksCount}</span>
+            </div>
+          ) : null}
+        </div>
       </div>
-    </div>
-  </a>
-);
+      <div className="grow flex flex-col gap-4 p-4">
+        <div className="line-clamp-5">
+          <p className="text-sm">{description ?? "No description provided."}</p>
+        </div>
+        <div />
+        <div className="flex flex-wrap items-center gap-2">
+          {(expandTags ? tags : tags.slice(0, TAGS_LIMIT)).map((tag) => (
+            <Tag key={tag} name={tag} />
+          ))}
+          {!expandTags && tags.length > TAGS_LIMIT ? (
+            <span
+              className="text-xs text-muted-foreground hover:text-foreground"
+              onClick={(e) => {
+                e.preventDefault();
+                setExpandTags(true);
+              }}
+            >
+              + {tags.length - TAGS_LIMIT} more
+            </span>
+          ) : null}
+        </div>
+      </div>
+    </a>
+  );
+};
