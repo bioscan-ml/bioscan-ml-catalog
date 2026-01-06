@@ -142,7 +142,7 @@ function App() {
                 lastUpdated: new Date(gitHubItem.pushed_at),
                 name: gitHubItem.name,
                 starCount: gitHubItem.stargazers_count,
-                tags: gitHubItem.topics,
+                tags: [...gitHubItem.topics, gitHubItem.language],
               }))}
               orderBy={orderBy}
               searchString={searchString}

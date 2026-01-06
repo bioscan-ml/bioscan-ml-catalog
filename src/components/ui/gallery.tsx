@@ -143,7 +143,7 @@ const GalleryItem = ({
         <div className="line-clamp-5">
           <p className="text-sm">{description ?? "No description provided."}</p>
         </div>
-        <div />
+        <div className="grow" />
         <div className="flex flex-wrap items-center gap-2">
           {(expandTags ? tags : tags.slice(0, TAGS_LIMIT)).map((tag) => (
             <Tag key={tag} name={tag} />
