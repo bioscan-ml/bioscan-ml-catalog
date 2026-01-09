@@ -121,6 +121,7 @@ function App() {
             />
             <Gallery
               items={huggingFaceModels.map((huggingFaceModel) => ({
+                description: huggingFaceModel.cardData?.description,
                 downloadCount: huggingFaceModel.downloads,
                 href: `https://huggingface.co/${huggingFaceModel.id}`,
                 id: huggingFaceModel.id,
