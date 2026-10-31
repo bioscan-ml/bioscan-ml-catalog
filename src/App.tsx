@@ -10,6 +10,7 @@ import { useState } from "react";
 import { Button, buttonVariants } from "./components/ui/button";
 import { Gallery } from "./components/ui/gallery";
 import { Input } from "./components/ui/input";
+import { externalDatasets } from "./lib/externalDatasets";
 import { useGitHubItems } from "./lib/useGitHubItems";
 import { useHuggingFaceDatasets } from "./lib/useHuggingFaceDatasets";
 import { useHuggingFaceModels } from "./lib/useHuggingFaceModels";
@@ -100,21 +101,28 @@ function App() {
           </div>
           <div className="w-full flex flex-col gap-16 md:gap-32">
             <Gallery
-              items={huggingFaceDatasets.map((huggingFaceDataset) => ({
-                description:
-                  huggingFaceDataset.cardData?.description ??
-                  huggingFaceDataset.description,
-                downloadCount: huggingFaceDataset.downloads,
-                href: `https://huggingface.co/datasets/${huggingFaceDataset.id}`,
-                id: huggingFaceDataset.id,
-                lastUpdated: new Date(huggingFaceDataset.lastModified),
-                likeCount: huggingFaceDataset.likes,
-                name:
-                  huggingFaceDataset.cardData?.pretty_name ??
-                  huggingFaceDataset.id.replace("bioscan-ml/", ""),
-                tags:
-                  huggingFaceDataset.cardData?.tags ?? huggingFaceDataset.tags,
-              }))}
+              items={[
+                ...huggingFaceDatasets.map((huggingFaceDataset) => ({
+                  description:
+                    huggingFaceDataset.cardData?.description ??
+                    huggingFaceDataset.description,
+                  downloadCount: huggingFaceDataset.downloads,
+                  href: `https://huggingface.co/datasets/${huggingFaceDataset.id}`,
+                  id: huggingFaceDataset.id,
+                  lastUpdated: new Date(huggingFaceDataset.lastModified),
+                  likeCount: huggingFaceDataset.likes,
+                  name:
+                    huggingFaceDataset.cardData?.pretty_name ??
+                    huggingFaceDataset.id.replace("bioscan-ml/", ""),
+                  tags:
+                    huggingFaceDataset.cardData?.tags ??
+                    huggingFaceDataset.tags,
+                })),
+                ...externalDatasets.map((externalDataset) => ({
+                  ...externalDataset,
+                  lastUpdated: new Date(externalDataset.lastUpdated),
+                })),
+              ]}
               orderBy={orderBy}
               searchString={searchString}
               title="Datasets"
